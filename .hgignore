@@ -1,0 +1,8 @@
+syntax: glob
+docs/_build
+htmlcov
+*.pyc
+*.swp
+*.egg-info
+.coverage
+.ropeproject

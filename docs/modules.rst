@@ -1,0 +1,2 @@
+.. automodule:: redisdb.backends
+   :members:
