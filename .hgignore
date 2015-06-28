@@ -6,3 +6,4 @@ htmlcov
 *.egg-info
 .coverage
 .ropeproject
+.tox

@@ -1,4 +1,3 @@
-[paths]
-venvs=
-    src/redisdb/
-    /usr/home/jstolarski/.virtualenvs/*/lib/python*/site-packages/redisdb/
+[run]
+source=src
+branch=yes

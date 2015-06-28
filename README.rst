@@ -14,36 +14,35 @@ Redisdb
     :target: https://pypi.python.org/pypi/django-redisdb/
     :alt: License
 
+.. image:: https://travis-ci.org/kidosoft/django-redisdb.svg?branch=master
+    :target: https://travis-ci.org/kidosoft/django-redisdb
+    :alt: Build status
 
-Goal
-====
+.. image:: https://coveralls.io/repos/kidosoft/django-redisdb/badge.svg
+    :target: https://coveralls.io/r/kidosoft/django-redisdb
+    :alt: Coverage
 
-Provide Redis backends for Django that faciliates using multiple Redis servers
-in the same time like if they were in master/master or sharded configuration.
+.. image:: https://readthedocs.org/projects/django-redisdb/badge/?format=svg
+    :target: https://django-redisdb.readthedocs.org
+    :alt: Documetation
+
+
+Django-redisdb is Redis [#REDIS]_ backend for Django [#Django]_ that allows 
+using Redis as a cache and as a database at the same time.
+Django-redisdb provides backends for master/master and sharded configuration.
 
 Installation
 ============
-
-Install requirements:
-
-.. code-block:: console
-    
-    pip install -r requirements.txt
-
-Install Redisdb:
 
 .. code-block:: console
 
    pip install django-redisdb
 
-or current development version:
+Quick usage guide
+=================
 
-.. code-block:: console
 
-   pip install hg+https:://bitbucket.org/kidosoft/django-redisdb
-
-Configuration
-=============
+In settings.py:
 
 .. code-block:: python
 
@@ -54,7 +53,7 @@ Configuration
             'LOCATION': [
                 'localhost:6379',
                 'localhost:6380',
-            ]
+            ],
         },
         'redis_copy': {
             'BACKEND': 'redisdb.backends.RedisCopy',  # copying backend
@@ -62,51 +61,47 @@ Configuration
             'LOCATION': [
                 'localhost:6379',
                 'localhost:6380',
-            ]
+            ],
         }
     }
 
-
-Redis is configured as cache backend although it should be treat as specialized
-database. There are two backends:
-
-Usage
-=====
-
-After configuration access to Redis is done like to any other Django cache:
+Usage:
 
 .. code-block:: python
 
-   from django.core.cache import caches
-   caches['redis_ring'].set('key1', 1)  # set key1 only on on server
-   caches['redis_copy'].set('key2', 2)  # set key2 on all servers
-   result_list = caches['redis_copy'].zrange('key3', 1, 10)  # redis only command
-
-Caveats 
-=======
-
-RedisCopy can save data to many nodes. Each of this nodes can return different
-result on save. For that reason commands that save data to nodes returns list
-of results from each node. E.g. with two nodes set for redis_copy:
-
-.. code-block:: python
-
-   >>> print caches['redis_copy'].set('key1', 2)
+   >>> from django.core.cache import caches
+   >>> caches['redis_ring'].set('one_key', 123)  # set key1 only on on server
+   [True]
+   >>> caches['redis_copy'].set('other_key', 234)  # set key2 on all servers
    [True, True]
+
+With RedisRing value is set only on one node. With RedisCopy it's set on all
+nodes (two nodes in examle above).
+
+Redis is much more powerfull then simple cache. It should be seen
+as a specialized database. With django-redisdb you can use all its power.
+For example you can use redis' sorted sets [#SORTEDSETS]_:
+
+.. code-block:: python
+
+    >>> caches['redis_copy'].zadd('myzset', 1, 'one')
+    [0, 1]
+    >>> caches['redis_copy'].zadd('myzset', 2, 'two')
+    [0, 1]
+    >>> caches['redis_copy'].zadd('myzset', 3, 'three')
+    [0, 1]
+    >>> caches['redis_copy'].zrange('myzset', 0, -1)
+    ['one', 'two', 'three']
+    >>> caches['redis_copy'].zrange('myzset', 0, -1, withscores=True)
+    [('one', 1.0), ('two', 2.0), ('three', 3.0)]
+
 
 Supported Django versions
 =========================
 
-Tested with: 
-
-* Django 1.2.7 on python2.7
-* Django 1.3.7 on python2.7
-* Django 1.4.16 on python2.7
-* Django 1.5.11 on python2.7, python3.2, python3.3, python3.4
-* Django 1.6.8 on python2.7, python3.2, python3.3, python3.4
-* Django 1.7.1 on python2.7, python3.2, python3.3, python3.4
+django-redisdb runs on Django 1.2 to Django 1.8
 
 Documentation
 =============
 
-http://kidosoft.pl/docs/django-redisdb/
+Full documentation is available at http://django-redisdb/en/latest/index.html

@@ -1,2 +1,4 @@
+mock==1.0.1
+django-smarttest==0.2.1
 redis>=2.10.3
 git+https://github.com/Doist/hash_ring.git

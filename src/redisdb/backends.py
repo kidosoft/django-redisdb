@@ -15,7 +15,7 @@ import redis
 
 class ConstRedis(redis.StrictRedis):
 
-    """ Redis client that adds consistent hashing to StrictRedis. """
+    """ Redis client that adds consistent hashing to :py:mod:`redis:StrictRedis`. """
 
     def __init__(self, *args, **kwargs):
         self.hash_key = kwargs.pop('hash_key', 1)
@@ -36,19 +36,21 @@ class AbstractRedis(BaseCache):
 
     def __init__(self, location, params):
         self.db = params.pop('DB')
+        options = params.pop('options', {})
         super(AbstractRedis, self).__init__(params)
-        self.create_nodes(location)
+        self.create_nodes(location, **options)
 
-    def create_nodes(self, location):
+    def create_nodes(self, location, **options):
         """ Create connections to redis nodes.
 
         @param str location: host:port indicating redis node location.
+        @param dict options: redis options
         """
         nodes = []
         for i, node in enumerate(location):
             host, port = node.rsplit(':', 1)
-            redis_pool = redis.ConnectionPool(host=host, port=port, db=self.db)
-            nodes.append(ConstRedis(connection_pool=redis_pool, hash_key=i))
+            redis_pool = redis.ConnectionPool(host=host, port=port, db=self.db, **options)
+            nodes.append(ConstRedis(connection_pool=redis_pool, hash_key=i, **options))
         self.nodes = nodes
         self.nodes_ring = hash_ring.HashRing(nodes)
 
@@ -124,6 +126,10 @@ class RedisRing(AbstractRedis):
 
     """ RedisRing backend which writes only to one Redis server based on key.
 
+    RedisRing is only a proxy to underlying :py:class:`ConstRedis` objects, which represents
+    each Redis instance. It has the same methods set as :py:class:`ConstRedis`.
+    Individual nodes can be accessed through `nodes` attribute.
+
     RedisRing is better suited for using Redis as memcached replacement.
     With one server failure data kept on that server have to be recreated.
     """
@@ -147,6 +153,10 @@ class RedisRing(AbstractRedis):
 class RedisCopy(AbstractRedis):
 
     """ Redis backend which writes to all Redis servers.
+
+    RedisCopy is only a proxy to underlying :py:class:`ConstRedis` objects, which represents
+    each Redis instance. It has the same methods set as :py:class:`ConstRedis`.
+    Individual nodes can be accessed through `nodes` attribute.
 
     Fetching is done only from one server based on key just like in RedisRing.
     RedisCopy can be seen like master/master configuration
