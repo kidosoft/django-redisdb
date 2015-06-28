@@ -18,6 +18,7 @@ setup(
     install_requires=[
         'redis',
         'hash_ring',
+        'Django>=1.2',
     ],
     classifiers=[
         'Development Status :: 4 - Beta',
