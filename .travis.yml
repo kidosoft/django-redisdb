@@ -34,9 +34,8 @@ matrix:
           python: "3.4"
 # command to install dependencies
 install:
-  - pip install -q Django==$DJANGO_VERSION
-  - pip install -r test-requirements.txt
   - pip install coveralls
+  - pip install tox
 # command to run tests
 script: 
     - tox -e py${TRAVIS_PYTHON_VERSION/./}-django${DJANGO_VERSION}

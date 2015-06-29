@@ -27,7 +27,7 @@ Redisdb
     :alt: Documetation
 
 
-Django-redisdb is Redis [#REDIS]_ backend for Django [#Django]_ that allows 
+Django-redisdb is Redis backend for Django that allows 
 using Redis as a cache and as a database at the same time.
 Django-redisdb provides backends for master/master and sharded configuration.
 
@@ -80,7 +80,7 @@ nodes (two nodes in examle above).
 
 Redis is much more powerfull then simple cache. It should be seen
 as a specialized database. With django-redisdb you can use all its power.
-For example you can use redis' sorted sets [#SORTEDSETS]_:
+For example you can use redis' sorted sets:
 
 .. code-block:: python
 
