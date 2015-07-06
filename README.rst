@@ -104,4 +104,4 @@ django-redisdb runs on Django 1.2 to Django 1.8
 Documentation
 =============
 
-Full documentation is available at http://django-redisdb/en/latest/index.html
+Full documentation is available at http://django-redisdb.readthedocs.org
