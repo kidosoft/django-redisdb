@@ -2,15 +2,15 @@
 Redisdb
 #######
 
-.. image:: https://pypip.in/wheel/django-redisdb/badge.svg
+.. image:: https://img.shields.io/pypi/wheel/django-redisdb.svg
     :target: https://pypi.python.org/pypi/django-redisdb/
     :alt: Wheel Status
 
-.. image:: https://pypip.in/version/django-redisdb/badge.svg
+.. image:: https://img.shields.io/pypi/v/django-redisdb.svg
     :target: https://pypi.python.org/pypi/django-redisdb/
     :alt: Latest Version
 
-.. image:: https://pypip.in/license/django-redisdb/badge.svg
+.. image:: https://img.shields.io/pypi/l/django-redisdb.svg
     :target: https://pypi.python.org/pypi/django-redisdb/
     :alt: License
 
